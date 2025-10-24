@@ -1,6 +1,8 @@
 package com.aps4.APS4.autenticacao;
 
 
+import com.aps4.APS4.autenticacao.dto.UsuarioCreateDTO;
+import com.aps4.APS4.autenticacao.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +21,13 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping
-    public Collection<Usuario> listarUsuarioController() {
+    public Collection<UsuarioDTO> listarUsuarioController() {
         return usuarioService.listarUsuarios();
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<Usuario> buscarUsuarioController(@PathVariable String email) {
-        Usuario usuario = usuarioService.buscarUsuario(email);
+    public ResponseEntity<UsuarioDTO> buscarUsuarioController(@PathVariable String email) {
+        UsuarioDTO usuario = usuarioService.buscarUsuario(email);
         if (usuario == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
         }
@@ -33,8 +35,8 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> cadastrarUsuarioController(@RequestBody Usuario usuario) {
-        Usuario criado = usuarioService.cadastrarUsuario(usuario);
+    public ResponseEntity<UsuarioDTO> cadastrarUsuarioController(@RequestBody UsuarioCreateDTO usuarioDto) {
+        UsuarioDTO  criado = usuarioService.cadastrarUsuario(usuarioDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
 
@@ -42,12 +44,6 @@ public class UsuarioController {
     public ResponseEntity<String> loginController(@RequestBody Usuario usuario) {
         String token = usuarioService.login(usuario);
         return ResponseEntity.ok(token);
-    }
-
-    @GetMapping("/validar")
-    public ResponseEntity<Usuario> validarToken(@RequestParam String token) {
-        Usuario usuario = usuarioService.validarToken(token);
-        return ResponseEntity.ok(usuario);
     }
 
 

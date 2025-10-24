@@ -1,4 +1,10 @@
 package com.aps4.APS4.autenticacao;
 
-public class UsuarioRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+
+@Repository
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
+    public Usuario findByEmail(String email);
 }

@@ -1,5 +1,8 @@
 package com.aps4.APS4.autenticacao;
 
+import com.aps4.APS4.autenticacao.dto.UsuarioCreateDTO;
+import com.aps4.APS4.autenticacao.dto.UsuarioDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -8,35 +11,60 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
 
-    private final HashMap<String, Usuario> usuariosDB = new HashMap<>();
-    private final HashMap<String, Usuario> tokensDB = new HashMap<>();
+    @Autowired
+    private UsuarioRepository repository;
 
+    private final HashMap<String, String> tokensDB = new HashMap<>();
 
-    public Usuario cadastrarUsuario(Usuario novoUsuario) {
+    private UsuarioDTO toDTO(Usuario usuario) {
+        if (usuario == null) return null;
+        return new UsuarioDTO(usuario.getId(), usuario.getEmail());
+    }
+
+    private Usuario fromCreateDTO(UsuarioCreateDTO dto) {
+        Usuario usuario = new Usuario();
+        usuario.setEmail(dto.email());
+        usuario.setPassword(dto.password());
+        return usuario;
+    }
+
+    public UsuarioDTO cadastrarUsuario(UsuarioCreateDTO novoUsuarioDto) {
+        Usuario novoUsuario = fromCreateDTO(novoUsuarioDto);
+        if (repository.findByEmail(novoUsuario.getEmail()) != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já cadastrado");
+        }
         String password = novoUsuario.getPassword();
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
         novoUsuario.setPassword(hashedPassword);
-        usuariosDB.put(novoUsuario.getEmail(), novoUsuario);
-        return novoUsuario;
+        Usuario salvo = repository.save(novoUsuario);
+        return toDTO(salvo);
     }
 
 
-    public Collection<Usuario> listarUsuarios() {
-        return usuariosDB.values();
-    };
+    public Collection<UsuarioDTO> listarUsuarios() {
+        return repository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
 
 
-    public Usuario buscarUsuario(String email) {
-        return usuariosDB.get(email);
+    public UsuarioDTO buscarUsuario(String email) {
+        Usuario userDB = repository.findByEmail(email);
+        if (userDB == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
+        }
+        return toDTO(userDB);
     }
 
 
     public String login(Usuario usuario) {
-        Usuario userDB = usuariosDB.get(usuario.getEmail());
+        Usuario userDB = repository.findByEmail(usuario.getEmail());
         if (userDB == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário não encontrado");
         }
@@ -50,18 +78,21 @@ public class UsuarioService {
 
     public String gerarToken(Usuario usuario) {
         String token = UUID.randomUUID().toString();
-        tokensDB.put(token, usuario);
+        tokensDB.put(token, usuario.getEmail()); // armazena apenas o email
         return token;
     }
 
 
-    public Usuario validarToken(String token) {
-        Usuario usuario = tokensDB.get(token);
-
-        if (usuario == null) {
-            throw new RuntimeException("Token Inválido");
+    public UsuarioDTO validarToken(String token) {
+        String email = tokensDB.get(token);
+        if (email == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token inválido");
         }
-        return usuario;
+        Usuario userDB = repository.findByEmail(email);
+        if (userDB == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token inválido");
+        }
+        return toDTO(userDB);
     }
 
 }
