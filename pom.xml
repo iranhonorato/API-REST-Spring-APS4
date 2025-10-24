@@ -40,6 +40,29 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+
+<!--    Para usar JPA com o Spring Boot, você precisa do starter que integra o Spring Data JPA
+        (a camada que faz o mapeamento objeto-relacional e conversa com o banco).-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+
+<!--    O H2 Database é um banco em memória (usado normalmente para desenvolvimento e testes).
+        Ele não precisa de instalação, o Spring Boot sobe ele automaticamente quando a dependência está presente.-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+<!--    Para criptografar (hashificar) senhas, o mais comum no Spring é usar o BCrypt, que já vem no Spring Security.-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 	</dependencies>
 
 	<build>
