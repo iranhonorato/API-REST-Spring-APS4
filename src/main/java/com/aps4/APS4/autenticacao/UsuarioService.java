@@ -2,12 +2,14 @@ package com.aps4.APS4.autenticacao;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 
+@Service
 public class UsuarioService {
 
     private final HashMap<String, Usuario> usuariosDB = new HashMap<>();
