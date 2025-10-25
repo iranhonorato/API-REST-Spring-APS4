@@ -7,7 +7,6 @@ import java.util.Optional;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
-    Optional<Cliente> findById(Integer id);
 
     Optional<Cliente> findByCpf(String cpf);
 }

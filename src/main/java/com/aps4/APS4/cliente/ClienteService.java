@@ -19,8 +19,8 @@ public class ClienteService {
     }
 
 
-    public Optional<Cliente> buscarCliente(Integer id) {
-        return repository.findById(id);
+    public Optional<Cliente> buscarCliente(String cpf) {
+        return repository.findByCpf(cpf);
     }
 
 

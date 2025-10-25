@@ -1,4 +1,11 @@
 package com.aps4.APS4.contaCorrente;
 
-public class ContaCorrenteRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.Optional;
+
+@Repository
+public interface ContaCorrenteRepository extends JpaRepository<ContaCorrente, String> {
+
+    Optional<ContaCorrente> findByConta(String conta);
 }

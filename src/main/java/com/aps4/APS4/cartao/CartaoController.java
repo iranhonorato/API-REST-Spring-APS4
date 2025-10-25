@@ -23,9 +23,9 @@ public class CartaoController {
         return cartaoService.listarCartoes();
     }
 
-    @GetMapping("/{id}")
-    public Optional<Cartao> buscarCartaoController(@PathVariable Integer id) {
-        return cartaoService.buscarPorNumero(id);
+    @GetMapping("/{numero}")
+    public Optional<Cartao> buscarCartaoController(@PathVariable String numero) {
+        return cartaoService.buscarPorNumero(numero);
     }
 
     @PostMapping
@@ -38,13 +38,13 @@ public class CartaoController {
         return ResponseEntity.ok(novoCartao);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{numero}")
     public ResponseEntity<?> deletarCartaoController(
-            @PathVariable Integer id,
+            @PathVariable String numero,
             @RequestHeader("Authorization") String token) {
 
         usuarioService.validarToken(token);
-        cartaoService.deletar(id);
+        cartaoService.deletar(numero);
         return ResponseEntity.noContent().build();
     }
 }

@@ -23,6 +23,7 @@ public class Cartao {
     @Column(nullable = false)
     private LocalDate validade;
 
+
     public enum CartaoStatus {ATIVO, CANCELADO}
 
     @Enumerated(EnumType.STRING)

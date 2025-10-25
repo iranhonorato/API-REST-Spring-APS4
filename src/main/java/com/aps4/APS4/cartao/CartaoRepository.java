@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface CartaoRepository extends JpaRepository<Cartao, Integer> {
-    Optional<Cartao> findById(Integer id);
     Optional<Cartao> findByNumeroCartao(String numeroCartao);
+
     void delete(Optional<Cartao> existente);
 }

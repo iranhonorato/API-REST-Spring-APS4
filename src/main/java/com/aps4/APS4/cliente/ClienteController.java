@@ -23,18 +23,18 @@ public class ClienteController {
         return clienteService.listarClientes();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> buscarClienteController(@PathVariable Integer id) {
-        Optional<Cliente> cliente = clienteService.buscarCliente(id);
+    @GetMapping("/{cpf}")
+    public ResponseEntity<?> buscarClienteController(@PathVariable String cpf) {
+        Optional<Cliente> cliente = clienteService.buscarCliente(cpf);
         if (cliente == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(cliente);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{cpf}")
     public ResponseEntity<?> editarClienteController(
-            @PathVariable Integer id,
+            @PathVariable String cpf,
             @RequestBody Cliente cliente,
             @RequestHeader("Authorization") String token) {
 

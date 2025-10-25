@@ -19,9 +19,9 @@ public class CartaoService {
         return repository.findAll();
     }
 
-    public Optional<Cartao> buscarPorNumero(Integer id) {
+    public Optional<Cartao> buscarPorNumero(String numero) {
 
-        return repository.findById(id);
+        return repository.findByNumeroCartao(numero);
     }
 
     public Cartao salvarCartao(Cartao cartao) {
@@ -39,8 +39,9 @@ public class CartaoService {
     }
 
 
-    public void deletar(Integer id) {
-        Optional<Cartao> existente = repository.findById(id);
+    public void deletar(String numero) {
+        Optional<Cartao> existente = repository.findByNumeroCartao(numero);
+
         repository.delete(existente);
     }
 

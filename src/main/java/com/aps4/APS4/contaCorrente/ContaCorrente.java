@@ -17,6 +17,9 @@ import static com.aps4.APS4.movimentacao.Movimentacao.TipoMovimentacao.SAQUE;
 public class ContaCorrente {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @Column(name = "conta", nullable = false, unique = true)
     private String conta;
 
@@ -59,6 +62,7 @@ public class ContaCorrente {
     public String getAgencia() {return agencia;}
     public String getConta() {return conta;}
     public Cliente getCliente() {return cliente;}
+    public Integer getId() {return id;}
 
     // Métodos set
     public void setAgencia(String agencia) {this.agencia = agencia;}
@@ -102,4 +106,6 @@ public class ContaCorrente {
 
     public ArrayList<Movimentacao> listaMovimentacoes() {return movimentacoes;}
     public ArrayList<Cartao> listaCartoes() {return cartoes;}
-}
+
+    }
+
