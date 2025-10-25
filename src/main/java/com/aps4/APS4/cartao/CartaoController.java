@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cartoes")
@@ -22,9 +23,9 @@ public class CartaoController {
         return cartaoService.listarCartoes();
     }
 
-    @GetMapping("/{numeroCartao}")
-    public Cartao buscarCartaoController(@PathVariable String numeroCartao) {
-        return cartaoService.buscarPorNumero(numeroCartao);
+    @GetMapping("/{id}")
+    public Optional<Cartao> buscarCartaoController(@PathVariable Integer id) {
+        return cartaoService.buscarPorNumero(id);
     }
 
     @PostMapping
@@ -39,11 +40,11 @@ public class CartaoController {
 
     @DeleteMapping("/{numeroCartao}")
     public ResponseEntity<?> deletarCartaoController(
-            @PathVariable String numeroCartao,
+            @PathVariable Integer id,
             @RequestHeader("Authorization") String token) {
 
         usuarioService.validarToken(token);
-        cartaoService.deletar(numeroCartao);
+        cartaoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 }

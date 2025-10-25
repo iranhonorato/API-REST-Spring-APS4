@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 
 @Service
@@ -18,8 +19,9 @@ public class CartaoService {
         return repository.findAll();
     }
 
-    public Cartao buscarPorNumero(String numeroCartao) {
-        return repository.findByNumeroCartao(numeroCartao);
+    public Optional<Cartao> buscarPorNumero(Integer id) {
+
+        return repository.findById(id);
     }
 
     public Cartao salvarCartao(Cartao cartao) {
@@ -27,7 +29,7 @@ public class CartaoService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O número do cartão não pode ser nulo ou vazio.");
         }
 
-        Cartao existente = repository.findByNumeroCartao(cartao.getNumeroCartao());
+        Optional<Cartao> existente = repository.findByNumeroCartao(cartao.getNumeroCartao());
         if (existente != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um cartão com esse número.");
         }
@@ -37,11 +39,8 @@ public class CartaoService {
     }
 
 
-    public void deletar(String numeroCartao) {
-        Cartao existente = repository.findByNumeroCartao(numeroCartao);
-        if (existente == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cartão não encontrado");
-        }
+    public void deletar(Integer id) {
+        Optional<Cartao> existente = repository.findById(id);
         repository.delete(existente);
     }
 
