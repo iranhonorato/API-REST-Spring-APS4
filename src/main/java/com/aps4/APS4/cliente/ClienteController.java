@@ -39,7 +39,7 @@ public class ClienteController {
 
         try {
             usuarioService.validarToken(token);
-            Cliente clienteEditado = clienteService.editarCliente(cpf, cliente);
+            Cliente clienteEditado = clienteService.editarCliente(cliente);
             return ResponseEntity.ok(clienteEditado);
 
         } catch (IllegalArgumentException e) {

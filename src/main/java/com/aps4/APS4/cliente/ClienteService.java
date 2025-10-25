@@ -1,42 +1,53 @@
 package com.aps4.APS4.cliente;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.HashMap;
 
 @Service
 public class ClienteService {
-    private final HashMap<String, Cliente> clientes = new HashMap<>();
 
+    @Autowired
+    private ClienteRepository repository;
 
-    public Collection<Cliente> listarClientes() {return clientes.values();}
+    public Collection<Cliente> listarClientes() {
+        return repository.findAll();
+    }
 
 
     public Cliente buscarCliente(String cpf) {
-        return clientes.get(cpf);
+        return repository.findByCpf(cpf);
     }
 
+
     public Cliente cadastrarCliente(Cliente cliente) {
-        if (cliente.getCpf() == null || cliente.getCpf().isEmpty()) {
-            throw new IllegalArgumentException("O CPF do cliente não pode ser nulo ou vazio");
+        if (cliente == null || cliente.getCpf() == null || cliente.getCpf().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O CPF do cliente não pode ser nulo ou vazio");
         }
 
-        if (clientes.containsKey(cliente.getCpf())) {
-            throw new IllegalArgumentException("Já existe um cliente com esse CPF");
-
+        Cliente existente = repository.findByCpf(cliente.getCpf());
+        if (existente != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um cliente com esse CPF");
         }
 
-        clientes.put(cliente.getCpf(), cliente);
+        repository.save(cliente);
         return cliente;
     }
 
-    public Cliente editarCliente(String cpf, Cliente novosDados) {
-        if (!clientes.containsKey(cpf)) {
-            throw new IllegalArgumentException("Cliente não encontrado com CPF: " + cpf);
-        }
-        clientes.put(cpf, novosDados);
-        return novosDados;
-    }
 
+    public Cliente editarCliente(Cliente novosDados) {
+        Cliente existente = repository.findByCpf(novosDados.getCpf());
+        if (existente == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado com CPF: " + novosDados.getCpf());
+        }
+        if (novosDados.getNome() != null) existente.setNome(novosDados.getNome());
+        if (novosDados.getDataNascimento() != null) existente.setDataNascimento(novosDados.getDataNascimento());
+
+        Cliente atualizado = repository.save(novosDados);
+        return atualizado;
+    }
 }
