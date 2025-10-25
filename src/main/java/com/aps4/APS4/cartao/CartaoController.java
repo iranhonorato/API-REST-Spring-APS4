@@ -38,7 +38,7 @@ public class CartaoController {
         return ResponseEntity.ok(novoCartao);
     }
 
-    @DeleteMapping("/{numeroCartao}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deletarCartaoController(
             @PathVariable Integer id,
             @RequestHeader("Authorization") String token) {
