@@ -1,10 +1,13 @@
 package com.aps4.APS4.cliente;
 
-import com.aps4.APS4.cartao.Cartao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
-    Cliente findByCpf(String cpf);
+    Optional<Cliente> findById(Integer id);
+
+    Optional<Cliente> findByCpf(String cpf);
 }

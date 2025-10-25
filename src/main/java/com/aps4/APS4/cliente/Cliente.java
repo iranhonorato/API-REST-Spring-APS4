@@ -39,6 +39,7 @@ public class Cliente {
     public String getCpf() {return this.cpf;}
     public LocalDate getDataNascimento() {return this.dataNascimento;}
     public Float getSalario() {return this.salario;}
+    public  Integer getId() {return this.id;}
 
 
     // Métodos set

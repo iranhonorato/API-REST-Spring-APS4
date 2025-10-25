@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -19,8 +19,8 @@ public class ClienteService {
     }
 
 
-    public Cliente buscarCliente(String cpf) {
-        return repository.findByCpf(cpf);
+    public Optional<Cliente> buscarCliente(Integer id) {
+        return repository.findById(id);
     }
 
 
@@ -29,7 +29,7 @@ public class ClienteService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O CPF do cliente não pode ser nulo ou vazio");
         }
 
-        Cliente existente = repository.findByCpf(cliente.getCpf());
+        Optional<Cliente> existente = repository.findByCpf(cliente.getCpf());
         if (existente != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um cliente com esse CPF");
         }
@@ -40,14 +40,21 @@ public class ClienteService {
 
 
     public Cliente editarCliente(Cliente novosDados) {
-        Cliente existente = repository.findByCpf(novosDados.getCpf());
-        if (existente == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado com CPF: " + novosDados.getCpf());
-        }
-        if (novosDados.getNome() != null) existente.setNome(novosDados.getNome());
-        if (novosDados.getDataNascimento() != null) existente.setDataNascimento(novosDados.getDataNascimento());
+        Cliente existente = repository.findById(novosDados.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 
-        Cliente atualizado = repository.save(novosDados);
+        if (existente == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado com ID:");
+        }
+
+        if (novosDados.getNome() != null) {
+            existente.setNome(novosDados.getNome());
+        }
+        if (novosDados.getDataNascimento() != null) {
+            existente.setDataNascimento(novosDados.getDataNascimento());
+        }
+
+        Cliente atualizado = repository.save(existente);
         return atualizado;
     }
 }

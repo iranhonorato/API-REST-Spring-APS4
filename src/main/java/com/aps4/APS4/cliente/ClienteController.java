@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/clientes")
@@ -22,18 +23,18 @@ public class ClienteController {
         return clienteService.listarClientes();
     }
 
-    @GetMapping("/{cpf}")
-    public ResponseEntity<?> buscarClienteController(@PathVariable String cpf) {
-        Cliente cliente = clienteService.buscarCliente(cpf);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarClienteController(@PathVariable Integer id) {
+        Optional<Cliente> cliente = clienteService.buscarCliente(id);
         if (cliente == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(cliente);
     }
 
-    @PutMapping("/{cpf}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> editarClienteController(
-            @PathVariable String cpf,
+            @PathVariable Integer id,
             @RequestBody Cliente cliente,
             @RequestHeader("Authorization") String token) {
 
