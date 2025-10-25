@@ -1,6 +1,9 @@
 package com.aps4.APS4.cartao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,34 +11,38 @@ import java.util.HashMap;
 
 @Service
 public class CartaoService {
-    // Banco de dados em memória
-    private final HashMap<String, Cartao> cartoes = new HashMap<>();
+    @Autowired
+    private CartaoRepository repository;
 
     public Collection<Cartao> listarCartoes() {
-        return cartoes.values();
+        return repository.findAll();
     }
 
     public Cartao buscarPorNumero(String numeroCartao) {
-        return cartoes.get(numeroCartao);
+        return repository.findByNumeroCartao(numeroCartao);
     }
 
     public Cartao salvarCartao(Cartao cartao) {
-        if (cartao.getNumeroCartao() == null || cartao.getNumeroCartao().isEmpty()) {
-            throw new IllegalArgumentException("O número do cartão não pode ser nulo ou vazio.");
-        }
-        // Verifica duplicidade
-        if (cartoes.containsKey(cartao.getNumeroCartao())) {
-            throw new IllegalArgumentException("Já existe um cartão com esse número.");
+        if (cartao == null || cartao.getNumeroCartao() == null || cartao.getNumeroCartao().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O número do cartão não pode ser nulo ou vazio.");
         }
 
-        cartoes.put(cartao.getNumeroCartao(), cartao);
+        Cartao existente = repository.findByNumeroCartao(cartao.getNumeroCartao());
+        if (existente != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um cartão com esse número.");
+        }
+
+        repository.save(cartao);
         return cartao;
     }
 
 
     public void deletar(String numeroCartao) {
-        cartoes.remove(numeroCartao);
-
+        Cartao existente = repository.findByNumeroCartao(numeroCartao);
+        if (existente == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cartão não encontrado");
+        }
+        repository.delete(existente);
     }
 
 }

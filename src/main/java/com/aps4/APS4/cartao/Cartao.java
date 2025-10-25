@@ -1,12 +1,32 @@
 package com.aps4.APS4.cartao;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
+
+@Entity
+@Table(name = "cartoes")
 public class Cartao {
-    public enum CartaoStatus {ATIVO, CANCELADO}
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+
+    @Column(name = "numero_cartao", unique = true, nullable = false)
     private String numeroCartao;
+
+    @Column(nullable = false)
     private String tipo;
+
+    @Column(nullable = false)
     private LocalDate validade;
+
+    public enum CartaoStatus {ATIVO, CANCELADO}
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private CartaoStatus status;
 
     public Cartao() {}
@@ -18,8 +38,8 @@ public class Cartao {
         this.status = status;
     }
 
-
     // Métodos get
+    public Integer getId() {return this.id;}
     public String getNumeroCartao() {return this.numeroCartao;}
     public String getTipo() {return this.tipo;}
     public LocalDate getValidade() {return this.validade;}
