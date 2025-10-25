@@ -4,6 +4,7 @@ package com.aps4.APS4.contaCorrente;
 import com.aps4.APS4.cartao.Cartao;
 import com.aps4.APS4.cliente.Cliente;
 import com.aps4.APS4.movimentacao.Movimentacao;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,14 +12,31 @@ import java.util.ArrayList;
 import static com.aps4.APS4.movimentacao.Movimentacao.TipoMovimentacao.DEPOSITO;
 import static com.aps4.APS4.movimentacao.Movimentacao.TipoMovimentacao.SAQUE;
 
-
+@Entity
+@Table(name = "contas_correntes")
 public class ContaCorrente {
-    private String agencia;
+
+    @Id
+    @Column(name = "conta", nullable = false, unique = true)
     private String conta;
+
+    @Column(nullable = false)
+    private String agencia;
+
+    @Column(nullable = false)
     private Float saldo;
+
+    @Column(nullable = false)
     private Float limite;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
+
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, orphanRemoval = true)
     private final ArrayList<Movimentacao> movimentacoes = new ArrayList<>(); // N Movimentações para cada Conta Corrente
+
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, orphanRemoval = true)
     private final ArrayList<Cartao> cartoes = new ArrayList<>(); // N Cartões para cada Conta Corrente
 
 
