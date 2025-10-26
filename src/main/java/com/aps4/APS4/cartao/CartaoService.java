@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Service
 public class CartaoService {
+
     @Autowired
     private CartaoRepository repository;
 
@@ -19,8 +20,7 @@ public class CartaoService {
         return repository.findAll();
     }
 
-    public Optional<Cartao> buscarPorNumero(String numero) {
-
+    public Cartao buscarPorNumero(String numero) {
         return repository.findByNumeroCartao(numero);
     }
 
@@ -29,7 +29,7 @@ public class CartaoService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O número do cartão não pode ser nulo ou vazio.");
         }
 
-        Optional<Cartao> existente = repository.findByNumeroCartao(cartao.getNumeroCartao());
+        Cartao existente = repository.findByNumeroCartao(cartao.getNumeroCartao());
         if (existente != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um cartão com esse número.");
         }
@@ -40,8 +40,10 @@ public class CartaoService {
 
 
     public void deletar(String numeroCartao) {
-        Cartao existente = repository.findByNumeroCartao(numeroCartao)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cartão não encontrado"));
+        Cartao existente = repository.findByNumeroCartao(numeroCartao);
+        if (existente == null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Não existe um cartao com esse número.");
+        }
         repository.delete(existente);
     }
 

@@ -33,7 +33,7 @@ public class Cartao {
     @Column(nullable = false)
     private CartaoStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "conta_id")
     @JsonIgnore
     private ContaCorrente conta;
@@ -49,6 +49,7 @@ public class Cartao {
 
     // Métodos get
     public Integer getId() {return this.id;}
+    public ContaCorrente getConta() {return this.conta;}
     public String getNumeroCartao() {return this.numeroCartao;}
     public String getTipo() {return this.tipo;}
     public LocalDate getValidade() {return this.validade;}

@@ -1,5 +1,6 @@
 package com.aps4.APS4.cartao;
 
+import com.aps4.APS4.autenticacao.Usuario;
 import com.aps4.APS4.autenticacao.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class CartaoController {
     }
 
     @GetMapping("/{numero}")
-    public Optional<Cartao> buscarCartaoController(@PathVariable String numero) {
+    public Cartao buscarCartaoController(@PathVariable String numero) {
         return cartaoService.buscarPorNumero(numero);
     }
 
