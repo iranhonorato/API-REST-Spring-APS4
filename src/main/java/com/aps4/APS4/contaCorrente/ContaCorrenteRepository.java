@@ -6,6 +6,5 @@ import java.util.Optional;
 
 @Repository
 public interface ContaCorrenteRepository extends JpaRepository<ContaCorrente, String> {
-
-    Optional<ContaCorrente> findByConta(String conta);
+    public ContaCorrente findByConta(String conta);
 }

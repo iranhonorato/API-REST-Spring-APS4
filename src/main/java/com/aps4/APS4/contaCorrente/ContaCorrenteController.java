@@ -26,8 +26,15 @@ public class ContaCorrenteController {
     }
 
     @GetMapping("/{conta}")
+    public ContaCorrente buscarContaController(@PathVariable String conta) {
+        return contaCorrenteService.buscarConta(conta);
+    }
+
+
+    @GetMapping("/{conta}")
     public ArrayList<Movimentacao> listarMovimentacoesController(@PathVariable String conta) {
-        return (ArrayList<Movimentacao>) contaCorrenteService.listarMovimentacoes(conta);
+        ArrayList<Movimentacao> movimentacoes = contaCorrenteService.listarMovimentacoes(conta);
+        return movimentacoes;
     }
 
 

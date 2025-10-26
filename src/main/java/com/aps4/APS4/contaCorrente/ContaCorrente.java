@@ -36,10 +36,10 @@ public class ContaCorrente {
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "contaCorrente")
     private final ArrayList<Movimentacao> movimentacoes = new ArrayList<>(); // N Movimentações para cada Conta Corrente
 
-    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "contaCorrente")
     private final ArrayList<Cartao> cartoes = new ArrayList<>(); // N Cartões para cada Conta Corrente
 
 
@@ -104,8 +104,8 @@ public class ContaCorrente {
         }
     }
 
-    public ArrayList<Movimentacao> listaMovimentacoes() {return movimentacoes;}
-    public ArrayList<Cartao> listaCartoes() {return cartoes;}
+    public ArrayList<Movimentacao> listaMovimentacoes() {return this.movimentacoes;}
+    public ArrayList<Cartao> listaCartoes() {return this.cartoes;}
 
     }
 
