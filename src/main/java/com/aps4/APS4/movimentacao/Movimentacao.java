@@ -26,9 +26,13 @@ public class Movimentacao {
     @Column(nullable = false)
     private TipoMovimentacao tipo;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "conta_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "conta_id")
     private ContaCorrente conta;
+
+
+    public Movimentacao() {}
+
 
     public Movimentacao(Float valor, LocalDate data, TipoMovimentacao tipo) {
         this.valor = valor;
