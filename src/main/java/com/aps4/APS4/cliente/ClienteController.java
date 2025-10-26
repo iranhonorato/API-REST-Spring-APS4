@@ -1,6 +1,7 @@
 package com.aps4.APS4.cliente;
 
 
+import com.aps4.APS4.autenticacao.Usuario;
 import com.aps4.APS4.autenticacao.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +26,21 @@ public class ClienteController {
 
     @GetMapping("/{cpf}")
     public ResponseEntity<?> buscarClienteController(@PathVariable String cpf) {
-        Optional<Cliente> cliente = clienteService.buscarCliente(cpf);
+        Cliente cliente = clienteService.buscarCliente(cpf);
         if (cliente == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(cliente);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> cadastrarClienteController(
+            @RequestBody Cliente cliente,
+            @RequestHeader("Authorization") String token) {
+
+        Usuario usuario = usuarioService.validarToken(token);
+        Cliente clienteSalvo = clienteService.cadastrarCliente(cliente);
+        return ResponseEntity.ok(clienteSalvo);
     }
 
     @PutMapping("/{cpf}")
@@ -46,5 +57,11 @@ public class ClienteController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @DeleteMapping("/{cpf}")
+    public void deletarClienteController(@PathVariable String cpf, @RequestHeader(name = "token") String token) {
+        Usuario usuario = usuarioService.validarToken(token);
+        clienteService.deletarCliente(cpf);
     }
 }

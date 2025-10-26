@@ -19,7 +19,7 @@ public class ClienteService {
     }
 
 
-    public Optional<Cliente> buscarCliente(String cpf) {
+    public Cliente buscarCliente(String cpf) {
         return repository.findByCpf(cpf);
     }
 
@@ -29,7 +29,7 @@ public class ClienteService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O CPF do cliente não pode ser nulo ou vazio");
         }
 
-        Optional<Cliente> existente = repository.findByCpf(cliente.getCpf());
+        Cliente existente = repository.findByCpf(cliente.getCpf());
         if (existente != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um cliente com esse CPF");
         }
@@ -40,11 +40,9 @@ public class ClienteService {
 
 
     public Cliente editarCliente(Cliente novosDados) {
-        Cliente existente = repository.findById(novosDados.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
-
+        Cliente existente = repository.findByCpf(novosDados.getCpf());
         if (existente == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado com ID:");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Não existe um cliente com esse CPF cadastrado");
         }
 
         if (novosDados.getNome() != null) {
@@ -53,8 +51,14 @@ public class ClienteService {
         if (novosDados.getDataNascimento() != null) {
             existente.setDataNascimento(novosDados.getDataNascimento());
         }
-
         Cliente atualizado = repository.save(existente);
         return atualizado;
+    }
+
+    public void deletarCliente(String cpf) {
+        Cliente cliente = buscarCliente(cpf);
+        if (cliente != null) {
+            repository.deleteById(cliente.getId());
+        }
     }
 }
