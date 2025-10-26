@@ -31,7 +31,7 @@ public class ContaCorrenteController {
     }
 
 
-    @GetMapping("/{conta}")
+    @GetMapping("/{conta}/movimentacoes")
     public ArrayList<Movimentacao> listarMovimentacoesController(@PathVariable String conta) {
         ArrayList<Movimentacao> movimentacoes = contaCorrenteService.listarMovimentacoes(conta);
         return movimentacoes;

@@ -60,8 +60,9 @@
 
 <!--    Para criptografar (hashificar) senhas, o mais comum no Spring é usar o BCrypt, que já vem no Spring Security.-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
         </dependency>
 	</dependencies>
 

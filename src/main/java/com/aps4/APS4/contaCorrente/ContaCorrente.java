@@ -36,10 +36,10 @@ public class ContaCorrente {
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "contaCorrente")
+    @OneToMany(mappedBy = "conta")
     private final ArrayList<Movimentacao> movimentacoes = new ArrayList<>(); // N Movimentações para cada Conta Corrente
 
-    @OneToMany(mappedBy = "contaCorrente")
+    @OneToMany(mappedBy = "conta")
     private final ArrayList<Cartao> cartoes = new ArrayList<>(); // N Cartões para cada Conta Corrente
 
 

@@ -4,7 +4,7 @@ import com.aps4.APS4.autenticacao.dto.UsuarioCreateDTO;
 import com.aps4.APS4.autenticacao.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,23 +22,22 @@ public class UsuarioService {
 
     private final HashMap<String, Usuario> tokensDB = new HashMap<>();
 
-    public Usuario cadastrarUsuario(Usuario novoUsuario) {
-        if (repository.findByEmail(novoUsuario.getEmail()) != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já cadastrado");
-        }
-
-        String password = novoUsuario.getPassword();
-        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        novoUsuario.setPassword(hashedPassword);
-        Usuario salvo = repository.save(novoUsuario);
-        return salvo;
-    }
 
 
     public List<Usuario> listarUsuarios() {
         return repository.findAll();
     }
 
+    public Usuario cadastrarUsuario(Usuario novoUsuario) {
+        if (repository.findByEmail(novoUsuario.getEmail()) != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já cadastrado");
+        }
+
+        String hashedPassword = BCrypt.hashpw(novoUsuario.getPassword(), BCrypt.gensalt());
+        novoUsuario.setPassword(hashedPassword);
+        Usuario salvo = repository.save(novoUsuario);
+        return salvo;
+    }
 
 
     public String login(Usuario usuario) {
