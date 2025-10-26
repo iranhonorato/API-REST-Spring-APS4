@@ -39,9 +39,9 @@ public class CartaoService {
     }
 
 
-    public void deletar(String numero) {
-        Optional<Cartao> existente = repository.findByNumeroCartao(numero);
-
+    public void deletar(String numeroCartao) {
+        Cartao existente = repository.findByNumeroCartao(numeroCartao)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cartão não encontrado"));
         repository.delete(existente);
     }
 

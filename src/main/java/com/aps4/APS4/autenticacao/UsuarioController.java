@@ -16,27 +16,17 @@ import java.util.Collection;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-
     @Autowired
     private UsuarioService usuarioService;
 
     @GetMapping
-    public Collection<UsuarioDTO> listarUsuarioController() {
+    public Collection<Usuario> listarUsuarioController() {
         return usuarioService.listarUsuarios();
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<UsuarioDTO> buscarUsuarioController(@PathVariable String email) {
-        UsuarioDTO usuario = usuarioService.buscarUsuario(email);
-        if (usuario == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
-        }
-        return ResponseEntity.ok(usuario);
-    }
-
     @PostMapping
-    public ResponseEntity<UsuarioDTO> cadastrarUsuarioController(@RequestBody UsuarioCreateDTO usuarioDto) {
-        UsuarioDTO  criado = usuarioService.cadastrarUsuario(usuarioDto);
+    public ResponseEntity<Usuario> cadastrarUsuarioController(@RequestBody Usuario usuario) {
+        Usuario  criado = usuarioService.cadastrarUsuario(usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
 

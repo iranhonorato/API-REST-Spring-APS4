@@ -1,5 +1,8 @@
 package com.aps4.APS4.cartao;
 
+import com.aps4.APS4.contaCorrente.ContaCorrente;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -29,6 +32,11 @@ public class Cartao {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CartaoStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conta_id")
+    @JsonIgnore
+    private ContaCorrente conta;
 
     public Cartao() {}
 

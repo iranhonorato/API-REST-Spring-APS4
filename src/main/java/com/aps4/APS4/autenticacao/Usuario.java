@@ -14,11 +14,11 @@ public class Usuario {
     private Integer id;
 
 
-    @Column(unique = true, nullable = false, length = 180)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @JsonIgnore
-    @Column(nullable = false, length = 60)
+    @Column(nullable = false)
     private String password;
 
 
