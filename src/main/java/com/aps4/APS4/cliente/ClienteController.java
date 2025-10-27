@@ -3,11 +3,14 @@ package com.aps4.APS4.cliente;
 
 import com.aps4.APS4.autenticacao.Usuario;
 import com.aps4.APS4.autenticacao.UsuarioService;
+import com.aps4.APS4.cliente.dto.ClienteRequestDTO;
+import com.aps4.APS4.cliente.dto.ClienteResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,13 +23,13 @@ public class ClienteController {
     private UsuarioService usuarioService;
 
     @GetMapping
-    public Collection<Cliente> listarClientesController() {
+    public List<ClienteResponseDTO> listarClientesController() {
         return clienteService.listarClientes();
     }
 
     @GetMapping("/{cpf}")
     public ResponseEntity<?> buscarClienteController(@PathVariable String cpf) {
-        Cliente cliente = clienteService.buscarCliente(cpf);
+        ClienteResponseDTO cliente = clienteService.buscarCliente(cpf);
         if (cliente == null) {
             return ResponseEntity.notFound().build();
         }
@@ -35,23 +38,23 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<?> cadastrarClienteController(
-            @RequestBody Cliente cliente,
+            @RequestBody ClienteRequestDTO cliente,
             @RequestHeader("Authorization") String token) {
 
         Usuario usuario = usuarioService.validarToken(token);
-        Cliente clienteSalvo = clienteService.cadastrarCliente(cliente);
+        ClienteResponseDTO clienteSalvo = clienteService.cadastrarCliente(cliente);
         return ResponseEntity.ok(clienteSalvo);
     }
 
     @PutMapping("/{cpf}")
     public ResponseEntity<?> editarClienteController(
             @PathVariable String cpf,
-            @RequestBody Cliente cliente,
+            @RequestBody ClienteRequestDTO cliente,
             @RequestHeader("Authorization") String token) {
 
         try {
             usuarioService.validarToken(token);
-            Cliente clienteEditado = clienteService.editarCliente(cliente);
+            ClienteResponseDTO clienteEditado = clienteService.editarCliente(cliente);
             return ResponseEntity.ok(clienteEditado);
 
         } catch (IllegalArgumentException e) {

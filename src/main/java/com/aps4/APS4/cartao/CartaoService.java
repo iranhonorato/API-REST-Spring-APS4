@@ -28,7 +28,7 @@ public class CartaoService {
     public List<CartaoResponseDTO> listarCartoes() {
         return repository.findAll()
                 .stream()
-                .map(CartaoResponseDTO::new) // usa o construtor direto
+                .map(CartaoResponseDTO::new)
                 .collect(Collectors.toList());
     }
 

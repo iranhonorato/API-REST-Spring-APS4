@@ -1,12 +1,18 @@
 package com.aps4.APS4.cliente;
 
+import com.aps4.APS4.cartao.dto.CartaoResponseDTO;
+import com.aps4.APS4.cliente.dto.ClienteRequestDTO;
+import com.aps4.APS4.cliente.dto.ClienteResponseDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteService {
@@ -14,51 +20,78 @@ public class ClienteService {
     @Autowired
     private ClienteRepository repository;
 
-    public Collection<Cliente> listarClientes() {
-        return repository.findAll();
+
+
+    public List<ClienteResponseDTO> listarClientes() {
+        return repository.findAll()
+                .stream()
+                .map(ClienteResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
 
-    public Cliente buscarCliente(String cpf) {
-        return repository.findByCpf(cpf);
+
+    public ClienteResponseDTO buscarCliente(String cpf) {
+        Cliente cliente = repository.findByCpf(cpf);
+        if (cliente == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado.");
+        }
+        return new ClienteResponseDTO(cliente);
     }
 
 
-    public Cliente cadastrarCliente(Cliente cliente) {
-        if (cliente == null || cliente.getCpf() == null || cliente.getCpf().isBlank()) {
+    @Transactional
+    public ClienteResponseDTO cadastrarCliente(ClienteRequestDTO dto) {
+        if (dto == null || dto.cpf() == null || dto.cpf().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O CPF do cliente não pode ser nulo ou vazio");
         }
 
-        Cliente existente = repository.findByCpf(cliente.getCpf());
+        Cliente existente = repository.findByCpf(dto.cpf());
         if (existente != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um cliente com esse CPF");
         }
 
-        repository.save(cliente);
-        return cliente;
+        Cliente cliente = new Cliente();
+        cliente.setCpf(dto.cpf());
+        cliente.setNome(dto.nome());
+        cliente.setDataNascimento(dto.dataNascimento());
+        cliente.setSalario(dto.salario());
+
+
+        Cliente salvo = repository.save(cliente);
+        return new ClienteResponseDTO(salvo);
     }
 
-
-    public Cliente editarCliente(Cliente novosDados) {
-        Cliente existente = repository.findByCpf(novosDados.getCpf());
+//  PUT - Editar informações de um cliente
+    @Transactional
+    public ClienteResponseDTO editarCliente(ClienteRequestDTO dto) {
+        Cliente existente = repository.findByCpf(dto.cpf());
         if (existente == null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Não existe um cliente com esse CPF cadastrado");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Não existe um existente com esse CPF cadastrado");
         }
 
-        if (novosDados.getNome() != null) {
-            existente.setNome(novosDados.getNome());
+        if (dto.nome() != null && !dto.nome().isBlank()) {
+            existente.setNome(dto.nome());
         }
-        if (novosDados.getDataNascimento() != null) {
-            existente.setDataNascimento(novosDados.getDataNascimento());
+        if (dto.dataNascimento() != null) {
+            existente.setDataNascimento(dto.dataNascimento());
         }
+        if (dto.salario() != null) {
+            existente.setSalario(dto.salario());
+        }
+
         Cliente atualizado = repository.save(existente);
-        return atualizado;
+        return new ClienteResponseDTO(atualizado);
     }
 
-    public void deletarCliente(String cpf) {
-        Cliente cliente = buscarCliente(cpf);
-        if (cliente != null) {
-            repository.deleteById(cliente.getId());
+
+//  DELETE - Deletar um usuário
+    public ClienteResponseDTO deletarCliente(String cpf) {
+        Cliente existente = repository.findByCpf(cpf);
+        if (existente == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado.");
         }
+        repository.delete(existente);
+        return new ClienteResponseDTO(existente);
     }
 }
