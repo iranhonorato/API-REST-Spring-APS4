@@ -1,9 +1,9 @@
 package com.aps4.APS4.cartao;
 
+import com.aps4.APS4.cartao.dto.CartaoRequestDTO;
+import com.aps4.APS4.cartao.dto.CartaoResponseDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 
 @Repository

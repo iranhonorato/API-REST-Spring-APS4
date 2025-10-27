@@ -1,8 +1,7 @@
 package com.aps4.APS4.contaCorrente.dto;
 
 
-import com.aps4.APS4.cartao.dto.CartaoDTO;
-import com.aps4.APS4.cliente.dto.ClienteDTO;
+import com.aps4.APS4.cartao.dto.CartaoResponseDTO;
 import com.aps4.APS4.movimentacao.dto.MovimentacaoDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -24,6 +23,6 @@ public record ContaCorrenteDTO(
 
         @Schema(description = "Movimentações associadas (resumo)") ArrayList<MovimentacaoDTO> movimentacoes,
 
-        @Schema(description = "Cartões associados (resumo)") ArrayList<CartaoDTO> cartoes
+        @Schema(description = "Cartões associados (resumo)") ArrayList<CartaoResponseDTO> cartoes
 ) {}
 
