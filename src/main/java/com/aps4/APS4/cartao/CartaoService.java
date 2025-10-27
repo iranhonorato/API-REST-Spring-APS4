@@ -24,7 +24,7 @@ public class CartaoService {
     private ContaCorrenteService contaCorrenteService;
 
 
-//  GET - Listar Cartões
+
     public List<CartaoResponseDTO> listarCartoes() {
         return repository.findAll()
                 .stream()
@@ -33,7 +33,7 @@ public class CartaoService {
     }
 
 
-//  GET - Listar um único cartão
+
     public CartaoResponseDTO buscarPorNumero(String numero) {
         Cartao cartao = repository.findByNumeroCartao(numero);
         if (cartao == null) {
@@ -43,9 +43,9 @@ public class CartaoService {
     }
 
 
-//  POST - Salvar cartão
+
     @Transactional
-    public Cartao salvarCartaoDTO(CartaoRequestDTO dto) {
+    public CartaoResponseDTO salvarCartaoDTO(CartaoRequestDTO dto) {
         if (dto == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O número do cartão não pode ser nulo ou vazio.");
         }
@@ -59,11 +59,13 @@ public class CartaoService {
         if (cartao.getNumeroCartao() == null || cartao.getNumeroCartao().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O número do cartão não pode ser nulo ou vazio.");
         }
-        return repository.save(cartao);
+
+        Cartao salvo = repository.save(cartao);
+        return new CartaoResponseDTO(salvo);
     }
 
 
-//  DELETE - Deletar um cartão específico
+
     @Transactional
     public CartaoResponseDTO deletar(String numeroCartao) {
         Cartao existente = repository.findByNumeroCartao(numeroCartao);

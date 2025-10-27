@@ -36,7 +36,7 @@ public class CartaoController {
             @RequestHeader("Authorization") String token) {
 
         usuarioService.validarToken(token);
-        Cartao novoCartao = cartaoService.salvarCartaoDTO(cartao);
+        CartaoResponseDTO novoCartao = cartaoService.salvarCartaoDTO(cartao);
         return ResponseEntity.ok(novoCartao);
     }
 

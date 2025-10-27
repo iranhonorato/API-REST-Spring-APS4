@@ -2,7 +2,6 @@ package com.aps4.APS4.cartao.dto;
 
 import com.aps4.APS4.cartao.Cartao;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDate;
 
