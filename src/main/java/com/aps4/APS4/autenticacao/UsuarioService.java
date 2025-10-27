@@ -1,7 +1,6 @@
 package com.aps4.APS4.autenticacao;
 
-import com.aps4.APS4.autenticacao.dto.UsuarioCreateDTO;
-import com.aps4.APS4.autenticacao.dto.UsuarioDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.mindrot.jbcrypt.BCrypt;
