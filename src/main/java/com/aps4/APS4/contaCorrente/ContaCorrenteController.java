@@ -2,6 +2,8 @@ package com.aps4.APS4.contaCorrente;
 
 import com.aps4.APS4.autenticacao.UsuarioService;
 import com.aps4.APS4.cliente.ClienteService;
+import com.aps4.APS4.contaCorrente.dto.ContaCorrenteRequestDTO;
+import com.aps4.APS4.contaCorrente.dto.ContaCorrenteResponseDTO;
 import com.aps4.APS4.movimentacao.Movimentacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 @RestController
@@ -21,12 +24,12 @@ public class ContaCorrenteController {
     private ContaCorrenteService contaCorrenteService;
 
     @GetMapping
-    public Collection<ContaCorrente> listarContasController() {
+    public List<ContaCorrenteRequestDTO> listarContasController() {
         return contaCorrenteService.listarContas();
     }
 
     @GetMapping("/{conta}")
-    public ContaCorrente buscarContaController(@PathVariable String conta) {
+    public ContaCorrenteRequestDTO buscarContaController(@PathVariable String conta) {
         return contaCorrenteService.buscarConta(conta);
     }
 
@@ -44,7 +47,7 @@ public class ContaCorrenteController {
             @RequestHeader("Authorization") String token) {
         try {
             usuarioService.validarToken(token);
-            ContaCorrente novaConta = contaCorrenteService.cadastrarConta(contaCorrente);
+            ContaCorrenteRequestDTO novaConta = contaCorrenteService.cadastrarConta(contaCorrente);
             return ResponseEntity.ok(novaConta);
 
         } catch (IllegalArgumentException e) {

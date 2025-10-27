@@ -1,11 +1,8 @@
 package com.aps4.APS4.cartao;
 
-import com.aps4.APS4.cartao.dto.CartaoResponseDTO;
 import com.aps4.APS4.contaCorrente.ContaCorrente;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDate;
 

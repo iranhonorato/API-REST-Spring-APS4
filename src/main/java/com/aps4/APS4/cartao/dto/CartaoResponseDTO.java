@@ -5,9 +5,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
 
-@Schema(name = "CartaoResponseDTO", description = "DTO do cartão retornado pela API")
+@Schema(name = "CartaoRequestDTO", description = "DTO do cartão enviado à API")
 public record CartaoResponseDTO(
-//    Não tem numero do cartao porque é dado sensível
+
+        @Schema(description = "Número do cartão")
+        String numeroCartao,
 
         @Schema(description = "Tipo do cartão", example="crédito")
         String tipo,
@@ -20,6 +22,7 @@ public record CartaoResponseDTO(
 ) {
     public CartaoResponseDTO(Cartao cartao) {
         this(
+                cartao.getNumeroCartao(),
                 cartao.getTipo(),
                 cartao.getValidade(),
                 cartao.getStatus()

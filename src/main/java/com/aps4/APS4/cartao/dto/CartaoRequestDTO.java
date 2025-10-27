@@ -2,15 +2,12 @@ package com.aps4.APS4.cartao.dto;
 
 import com.aps4.APS4.cartao.Cartao;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDate;
 
-@Schema(name = "CartaoRequestDTO", description = "DTO do cartão enviado à API")
+@Schema(name = "CartaoResponseDTO", description = "DTO do cartão retornado pela API")
 public record CartaoRequestDTO(
-
-        @Schema(description = "Número do cartão")
-        String numeroCartao,
+//    Não tem numero do cartao porque é dado sensível
 
         @Schema(description = "Tipo do cartão", example="crédito")
         String tipo,

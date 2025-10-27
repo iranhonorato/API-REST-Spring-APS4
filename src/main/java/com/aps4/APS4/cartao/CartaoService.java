@@ -1,7 +1,7 @@
 package com.aps4.APS4.cartao;
 
-import com.aps4.APS4.cartao.dto.CartaoRequestDTO;
 import com.aps4.APS4.cartao.dto.CartaoResponseDTO;
+import com.aps4.APS4.cartao.dto.CartaoRequestDTO;
 import com.aps4.APS4.contaCorrente.ContaCorrenteService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +44,7 @@ public class CartaoService {
 
 
     @Transactional
-    public CartaoResponseDTO salvarCartaoDTO(CartaoRequestDTO dto) {
+    public CartaoResponseDTO salvarCartaoDTO(CartaoResponseDTO dto) {
         if (dto == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O número do cartão não pode ser nulo ou vazio.");
         }

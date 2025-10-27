@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
 
-@Schema(name = "ClienteDTO", description = "DTO do cliente (reponse)")
+@Schema(name = "ClienteResponseDTO", description = "DTO do cliente (reponse)")
 public record ClienteResponseDTO(
 //        Não tem o cpf do cliente porque é dado sensível
 

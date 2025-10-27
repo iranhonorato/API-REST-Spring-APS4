@@ -62,6 +62,8 @@ public class ContaCorrente {
     public String getAgencia() {return agencia;}
     public String getConta() {return conta;}
     public Cliente getCliente() {return cliente;}
+    public Float getSaldo() {return saldo;}
+    public Float getLimite() {return limite;}
     public Integer getId() {return id;}
 
     // Métodos set

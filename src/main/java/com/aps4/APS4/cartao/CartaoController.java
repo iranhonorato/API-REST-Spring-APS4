@@ -1,13 +1,12 @@
 package com.aps4.APS4.cartao;
 
 import com.aps4.APS4.autenticacao.UsuarioService;
-import com.aps4.APS4.cartao.dto.CartaoRequestDTO;
 import com.aps4.APS4.cartao.dto.CartaoResponseDTO;
+import com.aps4.APS4.cartao.dto.CartaoRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -32,7 +31,7 @@ public class CartaoController {
 
     @PostMapping
     public ResponseEntity<?> salvarCartaoController(
-            @RequestBody CartaoRequestDTO cartao,
+            @RequestBody CartaoResponseDTO cartao,
             @RequestHeader("Authorization") String token) {
 
         usuarioService.validarToken(token);

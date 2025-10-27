@@ -1,6 +1,5 @@
 package com.aps4.APS4.cliente;
 
-import com.aps4.APS4.cartao.dto.CartaoResponseDTO;
 import com.aps4.APS4.cliente.dto.ClienteRequestDTO;
 import com.aps4.APS4.cliente.dto.ClienteResponseDTO;
 import jakarta.transaction.Transactional;
@@ -9,9 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,7 +59,7 @@ public class ClienteService {
         return new ClienteResponseDTO(salvo);
     }
 
-//  PUT - Editar informações de um cliente
+
     @Transactional
     public ClienteResponseDTO editarCliente(ClienteRequestDTO dto) {
         Cliente existente = repository.findByCpf(dto.cpf());
@@ -85,7 +82,7 @@ public class ClienteService {
     }
 
 
-//  DELETE - Deletar um usuário
+
     public ClienteResponseDTO deletarCliente(String cpf) {
         Cliente existente = repository.findByCpf(cpf);
         if (existente == null) {

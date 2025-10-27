@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
 
+@Schema(name = "ClienteRequestDTO", description = "DTO do cliente (request)")
 public record ClienteRequestDTO (
     @Schema(description="CPF do cliente", example="11122233344")
     String cpf,
