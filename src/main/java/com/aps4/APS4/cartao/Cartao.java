@@ -38,6 +38,7 @@ public class Cartao {
     @JsonIgnore
     private ContaCorrente conta;
 
+
     public Cartao() {}
 
     public Cartao(String numeroCartao, String tipo, LocalDate validade, CartaoStatus status) {
